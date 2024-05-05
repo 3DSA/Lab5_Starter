@@ -33,14 +33,23 @@ function init() {
   ) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
   }
-  // console.log(document.getElementsByTagName(button));
-  let voice_nMW = "";
-  document.querySelector('select').addEventListener('change', function(){
-    voice_nMW = document.querySelector('select').value;
-  })
+  
+
   document.getElementsByTagName('button')[0].addEventListener('click', function() {
     let utterance = new SpeechSynthesisUtterance(document.getElementById("text-to-speak").value);
-    utterance.voice = voice_nMW;
+    let selectedVoice = document.getElementById("voice-select");
+    selectedVoice.addEventListener('change', function(){
+      var selectedValue = selectedVoice.value;
+    });
+    
+    // Find the voice object that matches the selected voice
+    const voices = speechSynthesis.getVoices();
+    for (let i = 0; i < voices.length; i++) {
+      if (voices[i].name === selectedVoice.value) {
+        utterance.voice = voices[i];
+        break;
+      }
+    }
     speechSynthesis.speak(utterance);
     image.src = "assets/images/smiling-open.png";
     console.log(speechSynthesis.speaking);
